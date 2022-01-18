@@ -40,33 +40,49 @@ py.importlib.reload(py.importlib.import_module('get_push_db'));
 
 %%
 
-co_ids = py_range(1, 10);
-ind_dates = py_range(1, 4323);
+%
+N = 2; %375;
+T = 4323;
 
-temp = py.get_push_db.get_db('crypto', 'ohlcv', 'open__high__low__close__volume', co_ids, ind_dates, true);
+inputs.db_address = '192.168.154.101:27017';
+inputs.db_user = '';
+inputs.db_pass = '';
+inputs.db_name = 'crypto';
+inputs.coll = 'ohlcv';
+inputs.fields = 'open__high__low__close__volume';
+inputs.fields_format = '';
+inputs.co_ids = py_range(1, N);
+inputs.ind_dates = py_range(1, T);
+inputs.is_mat = 1;
+inputs.to_struct = 1;
 
-ohlcv = double(temp);
-Open = ohlcv(:,:,1);
+ohlcv = get_data(inputs);
+
+% ohlcv = double(temp);
+% 
+% 
+% n = 3;
+% candle1(ohlcv(n, :, 2)', ohlcv(n, :, 3)', ohlcv(n, :, 4)', ohlcv(n, :, 1)', 'k')
+% grid on
+% set(gca, 'YScale', 'log')
+% 
+% save('crypto_ohlcv.mat', 'ohlcv')
 
 
 
-n = 1;
-candle1(ohlcv(n, :, 2)', ohlcv(n, :, 3)', ohlcv(n, :, 4)', ohlcv(n, :, 1)', 'k')
-grid on
-set(gca, 'YScale', 'log')
+inputs.db_address = '192.168.154.101:27017';
+inputs.db_user = '';
+inputs.db_pass = '';
+inputs.db_name = 'crypto';
+inputs.coll = 'coins';
+inputs.fields = 'co_id__symbol';
+inputs.fields_format = {'d', 's'};
+inputs.co_ids = '';
+inputs.ind_dates = '';
+inputs.is_mat = 0;
+inputs.to_struct = 1;
 
-
-
-% temp = py.get_db.return_daily_data();
-
-closing_price = double(temp{1});
-closing_volume = double(temp{2});
-closing_price_prev = double(temp{3});
-
-
-
-
-
+coins = get_data(inputs);
 
 
 
