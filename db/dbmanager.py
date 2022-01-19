@@ -282,7 +282,7 @@ class DBManager:
         db_name: str required
             name of database stored in mongodb server
         """
-        self.client[db_name].drop_col(col_name)
+        self.client[db_name].drop_collection(col_name)
 
 
 class CorrectEncoding:
