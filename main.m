@@ -90,7 +90,6 @@ inputs_insert.db_pass = '';
 inputs_insert.db_name = 'crypto';
 inputs_insert.coll = 'test_3D';
 inputs_insert.fields = 'open__high__low__close__volume';
-inputs_insert.d_type = 'number';
 inputs_insert.drop_col = 1;
 
 inputs_insert.data = ohlcv;
@@ -107,7 +106,6 @@ inputs_insert.db_pass = '';
 inputs_insert.db_name = 'crypto';
 inputs_insert.coll = 'test_2D';
 inputs_insert.fields = 'f1__f2';
-inputs_insert.d_type = 'number';
 inputs_insert.drop_col = 1;
 
 inputs_insert.data = rand([2, 100])';
@@ -123,7 +121,6 @@ inputs_insert.db_pass = '';
 inputs_insert.db_name = 'crypto';
 inputs_insert.coll = 'test_1D';
 inputs_insert.fields = 'f1';
-inputs_insert.d_type = 'str';
 inputs_insert.drop_col = 1;
 
 inputs_insert.data = {'a1', 'a2'};

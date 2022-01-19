@@ -140,7 +140,7 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
 
 
 def insert_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db_name=None, coll=None, fields=None,
-           data=None, d_type=None, drop_col=False):
+           data=None, drop_col=False):
 
     # print(data.shape.__len__())
 
@@ -212,7 +212,7 @@ if __name__ == '__main__':
         arr = np.transpose(np.asarray(file['ohlcv']))
 
     insert_db('192.168.154.101:27017', db_name='crypto', coll='ohlcv2', fields='open__high__low__close__volume',
-                   data=arr, is_mat=True)
+                   data=arr)
 
     yu = 0
 
