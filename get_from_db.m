@@ -1,4 +1,4 @@
-function out_var = get_data(inputs)
+function out_var = get_from_db(inputs)
 
 %
 temp = py.get_push_db.get_db(inputs.db_address, inputs.db_user, inputs.db_pass, ...
