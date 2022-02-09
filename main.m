@@ -79,75 +79,75 @@ ohlcv = get_from_db(inputs);
 
 %% insert to db
 
-%
-load('crypto_ohlcv.mat')
-
-
-%
-inputs_insert.db_address = '192.168.154.101:27017';
-inputs_insert.db_user = '';
-inputs_insert.db_pass = '';
-inputs_insert.db_name = 'crypto';
-inputs_insert.coll = 'test_3D';
-inputs_insert.fields = 'open__high__low__close__volume';
-inputs_insert.drop_col = 1;
-
-inputs_insert.data = ohlcv;
-
-%
-insert_to_db(inputs_insert);
-
+% %
+% load('crypto_ohlcv.mat')
+% 
+% 
+% %
+% inputs_insert.db_address = '192.168.154.101:27017';
+% inputs_insert.db_user = '';
+% inputs_insert.db_pass = '';
+% inputs_insert.db_name = 'crypto';
+% inputs_insert.coll = 'test_3D';
+% inputs_insert.fields = 'open__high__low__close__volume';
+% inputs_insert.drop_col = 1;
+% 
+% inputs_insert.data = ohlcv;
+% 
+% %
+% insert_to_db(inputs_insert);
+% 
+% 
+% %%
+% 
+% inputs_insert.db_address = '192.168.154.101:27017';
+% inputs_insert.db_user = '';
+% inputs_insert.db_pass = '';
+% inputs_insert.db_name = 'crypto';
+% inputs_insert.coll = 'test_2D';
+% inputs_insert.fields = 'f1__f2';
+% inputs_insert.drop_col = 1;
+% 
+% inputs_insert.data = rand([2, 100])';
+% 
+% %
+% insert_to_db(inputs_insert);
+% 
+% 
+% %%
+% inputs_insert.db_address = '192.168.154.101:27017';
+% inputs_insert.db_user = '';
+% inputs_insert.db_pass = '';
+% inputs_insert.db_name = 'crypto';
+% inputs_insert.coll = 'test_1D';
+% inputs_insert.fields = 'f1';
+% inputs_insert.drop_col = 1;
+% 
+% inputs_insert.data = {'a1', 'a2'};
+% 
+% %
+% insert_to_db(inputs_insert);
 
 %%
 
-inputs_insert.db_address = '192.168.154.101:27017';
-inputs_insert.db_user = '';
-inputs_insert.db_pass = '';
-inputs_insert.db_name = 'crypto';
-inputs_insert.coll = 'test_2D';
-inputs_insert.fields = 'f1__f2';
-inputs_insert.drop_col = 1;
+figure(1)
+for n = 1:N
+    pl(1) = subplot(4, 1, [1 2 3]);
+    candle1(ohlcv(n, :, 2)', ohlcv(n, :, 3)', ohlcv(n, :, 4)', ohlcv(n, :, 1)', 'k')
+    grid on
+    set(gca, 'YScale', 'log')
 
-inputs_insert.data = rand([2, 100])';
+    title([num2str(n), ': ', coins.symbol{n}])
 
-%
-insert_to_db(inputs_insert);
-
-
-%%
-inputs_insert.db_address = '192.168.154.101:27017';
-inputs_insert.db_user = '';
-inputs_insert.db_pass = '';
-inputs_insert.db_name = 'crypto';
-inputs_insert.coll = 'test_1D';
-inputs_insert.fields = 'f1';
-inputs_insert.drop_col = 1;
-
-inputs_insert.data = {'a1', 'a2'};
-
-%
-insert_to_db(inputs_insert);
-
-%%
-
-% figure(1)
-% for n = 1:N
-%     pl(1) = subplot(4, 1, [1 2 3]);
-%     candle1(ohlcv(n, :, 2)', ohlcv(n, :, 3)', ohlcv(n, :, 4)', ohlcv(n, :, 1)', 'k')
-%     grid on
+    pl(2) = subplot(4, 1, 4);
+    plot(ohlcv(n, :, 5)', 'LineWidth', 1.5)
+    grid on
 %     set(gca, 'YScale', 'log')
-% 
-%     title([num2str(n), ': ', coins.symbol{n}])
-% 
-%     pl(2) = subplot(4, 1, 4);
-%     plot(ohlcv(n, :, 5)', 'LineWidth', 1.5)
-%     grid on
-%     set(gca, 'YScale', 'log')
-% 
-%     linkaxes(pl, 'x')
-% 
-%     pause
-% end
+
+    linkaxes(pl, 'x')
+
+    pause
+end
 
 
 
