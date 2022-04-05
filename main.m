@@ -54,7 +54,7 @@ inputs.is_mat = 0;
 inputs.to_struct = 1;
 
 coins = get_from_db(inputs);
-
+% save('coins.mat', 'coins', '-v7.3')
 
 %
 N = 375;
@@ -74,7 +74,7 @@ inputs.to_struct = 0;
 
 ohlcv = get_from_db(inputs);
 
-% save('crypto_ohlcv.mat', 'ohlcv', '-v7.3')
+% save('ohlcv_crypto.mat', 'ohlcv', '-v7.3')
 % save('crypto_ohlcv_stc.mat', 'ohlcv', '-v7.3')
 
 %% insert to db
@@ -142,7 +142,7 @@ for n = 1:N
     pl(2) = subplot(4, 1, 4);
     plot(ohlcv(n, :, 5)', 'LineWidth', 1.5)
     grid on
-%     set(gca, 'YScale', 'log')
+    set(gca, 'YScale', 'log')
 
     linkaxes(pl, 'x')
 
