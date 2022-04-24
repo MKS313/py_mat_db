@@ -117,6 +117,22 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
         drop=True)
 
     #
+    # sort
+    if 'co_id' in data.columns.to_list():
+        data = data.sort_values(['co_id'])
+    elif ind_date_str in data.columns.to_list():
+        data = data.sort_values([ind_date_str])
+
+    #
+    results = list()
+    for f in fields:
+        if 'int' in str(data[f].values.dtype) or 'float' in str(data[f].values.dtype):
+            results.append(data[f].values)
+        elif 'object' in str(data[f].values.dtype):
+            results.append(data[f].values.tolist())
+
+    results = tuple(results)
+
     if co_ids is None and ind_dates is None:
         # sort
         if 'co_id' in data.columns.to_list():
@@ -259,9 +275,9 @@ if __name__ == '__main__':
     #
     # adj_factor = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123', db_name='market', coll='adj_factor', fields='adj_factor', co_ids=list(range(457)), ind_dates=list(range(2325)), is_mat=True, is_old=True)
 
-    # tepix = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123',
-    #                     db_name='market', coll='tepix', fields='close_nw__close_real',
-    #                     ind_dates=list(range(2325)), is_mat=True, is_old=True)
+    tepix = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123',
+                        db_name='market', coll='tepix', fields='close_nw__close_real',
+                        ind_dates=list(range(2325)), is_mat=False, is_old=True)
 
     # coins, a = get_db('192.168.154.101:27017', db_name='crypto', coll='coins', fields='co_id__symbol')
 
