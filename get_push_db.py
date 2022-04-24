@@ -82,19 +82,24 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
         d_select = {}
     else:
         # check co_ids
-        if str(co_ids) == 'all':
-            co_id_q = {'$exists': True}
-        elif len(co_ids) > 0:
-            co_id_q = {'$in': co_ids}
+        if co_ids is not None:
+            if str(co_ids) == 'all':
+                co_id_q = {'$exists': True}
+            elif len(co_ids) > 0:
+                co_id_q = {'$in': co_ids}
 
         # check ind_dates
-        if str(ind_dates) == 'all':
-            ind_date_q = {'$exists': True}
-        elif len(ind_dates) > 0:
-            ind_date_q = {'$in': ind_dates}
+        if ind_dates is not None:
+            if str(ind_dates) == 'all':
+                ind_date_q = {'$exists': True}
+            elif len(ind_dates) > 0:
+                ind_date_q = {'$in': ind_dates}
 
         # create query and d_select
-        if ind_dates is None:
+        if co_ids is None and ind_dates is not None:
+            query = {ind_date_str: ind_date_q}
+            d_select = {ind_date_str: True}
+        elif ind_dates is None and co_ids is not None:
             query = {'co_id': co_id_q}
             d_select = {'co_id': True}
         else:
@@ -113,11 +118,13 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
 
     #
     if co_ids is None and ind_dates is None:
+        # sort
         if 'co_id' in data.columns.to_list():
             data = data.sort_values(['co_id'])
         elif ind_date_str in data.columns.to_list():
             data = data.sort_values([ind_date_str])
 
+        #
         results = list()
         for f in fields:
             if 'int' in str(data[f].values.dtype) or 'float' in str(data[f].values.dtype):
@@ -127,7 +134,36 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
 
         results = tuple(results)
 
+    elif co_ids is None and ind_dates is not None:
+        # sort by and ind_date
+        data = data.sort_values([ind_date_str])
+
+        max_dates = data[ind_date_str].max() + 1
+
+        if is_mat or is_mat == 1:
+            d3 = len(fields)
+            results = np.zeros((d3, max_dates)) * np.nan
+            r = 0
+            for f in fields:
+                results[r, list(data[ind_date_str])] = list(data[f])
+                r += 1
+
+    elif co_ids is not None and ind_dates is None:
+        # sort by and co_id
+        data = data.sort_values(['co_id'])
+
+        max_stocks = data['co_id'].max() + 1
+
+        if is_mat or is_mat == 1:
+            d3 = len(fields)
+            results = np.zeros((max_stocks, d3)) * np.nan
+            r = 0
+            for f in fields:
+                results[list(data['co_id']), r] = list(data[f])
+                r += 1
+
     else:
+        # sort by co_id and ind_date
         data = data.sort_values(['co_id', ind_date_str])
 
         max_stocks = data['co_id'].max() + 1
@@ -221,8 +257,11 @@ if __name__ == '__main__':
 
     # yu = 0
     #
-    # coins, a = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123', db_name='market', coll='adj_factor', fields='adj_factor', co_ids=list(range(457)), ind_dates=list(range(2325)), is_mat=True, is_old=True)
+    # adj_factor = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123', db_name='market', coll='adj_factor', fields='adj_factor', co_ids=list(range(457)), ind_dates=list(range(2325)), is_mat=True, is_old=True)
 
+    # tepix = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123',
+    #                     db_name='market', coll='tepix', fields='close_nw__close_real',
+    #                     ind_dates=list(range(2325)), is_mat=True, is_old=True)
 
     # coins, a = get_db('192.168.154.101:27017', db_name='crypto', coll='coins', fields='co_id__symbol')
 
