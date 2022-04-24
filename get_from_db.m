@@ -2,7 +2,7 @@ function out_var = get_from_db(inputs)
 
 %
 temp = py.get_push_db.get_db(inputs.db_address, inputs.db_user, inputs.db_pass, ...
-    inputs.db_name, inputs.coll, inputs.fields, inputs.co_ids, inputs.ind_dates, inputs.is_mat);
+    inputs.db_name, inputs.coll, inputs.fields, inputs.co_ids, inputs.ind_dates, inputs.is_mat, inputs.is_old_format);
 
 %
 if inputs.is_mat && inputs.to_struct
