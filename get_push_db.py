@@ -63,10 +63,10 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
     #
     db = create_db_manager(db_address=db_address, db_user_name=db_user_name, db_password=db_password)
 
-    if co_ids in ['', ' ', '-']:
+    if co_ids in ['', ' ', '-'] or len(co_ids) == 0:
         co_ids = None
 
-    if ind_dates in ['', ' ', '-']:
+    if ind_dates in ['', ' ', '-'] or len(ind_dates) == 0:
         ind_dates = None
 
     fields = fields.split('__')
@@ -118,10 +118,12 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
 
     #
     # sort
-    if 'co_id' in data.columns.to_list():
-        data = data.sort_values(['co_id'])
+    if 'co_id' in data.columns.to_list() and ind_date_str in data.columns.to_list():
+        data = data.sort_values(['co_id', ind_date_str]).reset_index(drop=True)
+    elif 'co_id' in data.columns.to_list():
+        data = data.sort_values(['co_id']).reset_index(drop=True)
     elif ind_date_str in data.columns.to_list():
-        data = data.sort_values([ind_date_str])
+        data = data.sort_values([ind_date_str]).reset_index(drop=True)
 
     #
     results = list()
@@ -135,10 +137,12 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
 
     if co_ids is None and ind_dates is None:
         # sort
-        if 'co_id' in data.columns.to_list():
-            data = data.sort_values(['co_id'])
+        if 'co_id' in data.columns.to_list() and ind_date_str in data.columns.to_list():
+            data = data.sort_values(['co_id', ind_date_str]).reset_index(drop=True)
+        elif 'co_id' in data.columns.to_list():
+            data = data.sort_values(['co_id']).reset_index(drop=True)
         elif ind_date_str in data.columns.to_list():
-            data = data.sort_values([ind_date_str])
+            data = data.sort_values([ind_date_str]).reset_index(drop=True)
 
         #
         results = list()
@@ -152,7 +156,7 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
 
     elif co_ids is None and ind_dates is not None:
         # sort by and ind_date
-        data = data.sort_values([ind_date_str])
+        data = data.sort_values([ind_date_str]).reset_index(drop=True)
 
         max_dates = data[ind_date_str].max() + 1
 
@@ -166,7 +170,7 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
 
     elif co_ids is not None and ind_dates is None:
         # sort by and co_id
-        data = data.sort_values(['co_id'])
+        data = data.sort_values(['co_id']).reset_index(drop=True)
 
         max_stocks = data['co_id'].max() + 1
 
@@ -180,7 +184,7 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
 
     else:
         # sort by co_id and ind_date
-        data = data.sort_values(['co_id', ind_date_str])
+        data = data.sort_values(['co_id', ind_date_str]).reset_index(drop=True)
 
         max_stocks = data['co_id'].max() + 1
         max_dates = data[ind_date_str].max() + 1
@@ -273,7 +277,7 @@ if __name__ == '__main__':
 
     # yu = 0
     #
-    # adj_factor = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123', db_name='market', coll='adj_factor', fields='adj_factor', co_ids=list(range(457)), ind_dates=list(range(2325)), is_mat=True, is_old=True)
+    adj_factor = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123', db_name='market', coll='adj_factor', fields='adj_factor', co_ids=list(range(457)), ind_dates=list(range(2325-1, 2325)), is_mat=True, is_old=True)
 
     # tepix = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123',
     #                     db_name='market', coll='tepix', fields='close_nw__close_real',
