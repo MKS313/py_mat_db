@@ -275,9 +275,9 @@ if __name__ == '__main__':
     #
     # adj_factor = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123', db_name='market', coll='adj_factor', fields='adj_factor', co_ids=list(range(457)), ind_dates=list(range(2325)), is_mat=True, is_old=True)
 
-    tepix = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123',
-                        db_name='market', coll='tepix', fields='close_nw__close_real',
-                        ind_dates=list(range(2325)), is_mat=False, is_old=True)
+    # tepix = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123',
+    #                     db_name='market', coll='tepix', fields='close_nw__close_real',
+    #                     ind_dates=list(range(2325)), is_mat='', is_old=True)
 
     # coins, a = get_db('192.168.154.101:27017', db_name='crypto', coll='coins', fields='co_id__symbol')
 
