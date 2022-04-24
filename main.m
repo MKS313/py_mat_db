@@ -30,7 +30,9 @@ distcomp.feature( 'LocalUseMpiexec', false)
 % py.importlib.reload(py.importlib.import_module('alg_signal_to_google_sheet'));
 
 clear classes
-insert(py.sys.path, int32(0), pwd);
+if count(py.sys.path, pwd)==0
+    insert(py.sys.path, int32(0), pwd);
+end
 py.importlib.reload(py.importlib.import_module('get_push_db'));
 py.importlib.reload(py.importlib.import_module('numpy'));
 
