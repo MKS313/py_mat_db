@@ -58,7 +58,7 @@ def _2D_to_st(df_in=None, time_frame=None):
 
 
 def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db_name=None, coll=None, fields=None,
-           co_ids=None, ind_dates=None, is_mat=None):
+           co_ids=None, ind_dates=None, is_mat=None, is_old=None):
 
     #
     db = create_db_manager(db_address=db_address, db_user_name=db_user_name, db_password=db_password)
@@ -70,6 +70,11 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
         ind_dates = None
 
     fields = fields.split('__')
+
+    if is_old or is_old == 1:
+        ind_date_str = 'ind_matlab_date'
+    else:
+        ind_date_str = 'ind_date'
 
     # fill query
     if co_ids is None and ind_dates is None:
@@ -93,8 +98,8 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
             query = {'co_id': co_id_q}
             d_select = {'co_id': True}
         else:
-            query = {'co_id': co_id_q, 'ind_date': ind_date_q}
-            d_select = {'co_id': True, 'ind_date': True}
+            query = {'co_id': co_id_q, ind_date_str: ind_date_q}
+            d_select = {'co_id': True, ind_date_str: True}
 
     # fill d_select
     for f in fields:
@@ -110,8 +115,8 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
     if co_ids is None and ind_dates is None:
         if 'co_id' in data.columns.to_list():
             data = data.sort_values(['co_id'])
-        elif 'ind_date' in data.columns.to_list():
-            data = data.sort_values(['ind_date'])
+        elif ind_date_str in data.columns.to_list():
+            data = data.sort_values([ind_date_str])
 
         results = list()
         for f in fields:
@@ -123,17 +128,17 @@ def get_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None, db
         results = tuple(results)
 
     else:
-        data = data.sort_values(['co_id', 'ind_date'])
+        data = data.sort_values(['co_id', ind_date_str])
 
         max_stocks = data['co_id'].max() + 1
-        max_dates = data['ind_date'].max() + 1
+        max_dates = data[ind_date_str].max() + 1
 
         if is_mat or is_mat == 1:
             d3 = len(fields)
             results = np.zeros((max_stocks, max_dates, d3)) * np.nan
             r = 0
             for f in fields:
-                results[list(data['co_id']), list(data['ind_date']), r] = list(data[f])
+                results[list(data['co_id']), list(data[ind_date_str]), r] = list(data[f])
                 r += 1
 
     return results
@@ -205,17 +210,18 @@ def insert_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None,
 
 if __name__ == '__main__':
 
-    file_path = './crypto_ohlcv.mat'
-    load_item = ['open', 'high', 'low', 'close', 'volume']
+    # file_path = './crypto_ohlcv.mat'
+    # load_item = ['open', 'high', 'low', 'close', 'volume']
+    #
+    # with h5py.File(file_path, 'r') as file:
+    #     arr = np.transpose(np.asarray(file['ohlcv']))
+    #
+    # insert_db('192.168.154.101:27017', db_name='crypto', coll='ohlcv2', fields='open__high__low__close__volume',
+    #                data=arr)
 
-    with h5py.File(file_path, 'r') as file:
-        arr = np.transpose(np.asarray(file['ohlcv']))
-
-    insert_db('192.168.154.101:27017', db_name='crypto', coll='ohlcv2', fields='open__high__low__close__volume',
-                   data=arr)
-
-    yu = 0
-
+    # yu = 0
+    #
+    # coins, a = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123', db_name='market', coll='adj_factor', fields='adj_factor', co_ids=list(range(457)), ind_dates=list(range(2325)), is_mat=True, is_old=True)
 
 
     # coins, a = get_db('192.168.154.101:27017', db_name='crypto', coll='coins', fields='co_id__symbol')
