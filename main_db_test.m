@@ -118,7 +118,7 @@ features_fuzzy = get_from_db(query_info);
 
 
 
-save('deep_data.mat', '', '', '', '', '')
+% save('deep_data.mat', '', '', '', '', '')
 
 
 

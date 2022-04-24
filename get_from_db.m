@@ -8,7 +8,7 @@ temp = py.get_push_db.get_db(inputs.db_address, inputs.db_user, inputs.db_pass, 
 if inputs.is_mat && inputs.to_struct
     out_var = to_struct_(double(temp), inputs);
 
-elseif inputs.is_mat
+elseif inputs.is_mat && ~inputs.to_struct
     out_var = double(temp);
 
 else
