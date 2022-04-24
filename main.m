@@ -30,9 +30,7 @@ distcomp.feature( 'LocalUseMpiexec', false)
 % py.importlib.reload(py.importlib.import_module('alg_signal_to_google_sheet'));
 
 clear classes
-if count(py.sys.path, pwd)==0
-    insert(py.sys.path, int32(0), pwd);
-end
+insert(py.sys.path, int32(0), pwd);
 py.importlib.reload(py.importlib.import_module('get_push_db'));
 py.importlib.reload(py.importlib.import_module('numpy'));
 
@@ -129,6 +127,29 @@ ohlcv = get_from_db(inputs);
 % 
 % %
 % insert_to_db(inputs_insert);
+
+%% get from old algo-db
+% ind_matlab_stock
+
+
+N = 457;
+T = 2325;
+
+query_info.db_address = '192.168.154.107:27017';
+query_info.db_user = 'user';
+query_info.db_pass = 'algorithm123';
+query_info.db_name = 'market';
+query_info.coll = 'adj_factor';
+query_info.fields = 'adj_factor';
+query_info.fields_format = '';
+query_info.co_ids = py_range(1, N);
+query_info.ind_dates = py_range(1, T);
+query_info.is_mat = 1;
+query_info.to_struct = 0;
+query_info.is_old_format = 0;
+
+adj_factor = get_from_db(query_info);
+
 
 %%
 
