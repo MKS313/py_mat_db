@@ -223,7 +223,8 @@ def insert_db(db_address='127.0.0.1:27017', db_user_name=None, db_password=None,
             r += 1
 
         this_data_temp = pd.concat({k: pd.DataFrame(v) for k, v in this_dict.items()}, axis=1)
-        this_data = _2D_to_st(this_data_temp).dropna().reset_index(drop=True)
+        # this_data = _2D_to_st(this_data_temp).dropna().reset_index(drop=True)
+        this_data = _2D_to_st(this_data_temp)
 
         query_del = query_db(this_data['co_id'].drop_duplicates().reset_index(drop=True).values.tolist(),
                              this_data['ind_date'].drop_duplicates().reset_index(drop=True).values.tolist())
@@ -277,7 +278,7 @@ if __name__ == '__main__':
 
     # yu = 0
     #
-    adj_factor = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123', db_name='market', coll='adj_factor', fields='adj_factor', co_ids=list(range(457)), ind_dates=list(range(2325-1, 2325)), is_mat=True, is_old=True)
+    # adj_factor = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123', db_name='market', coll='adj_factor', fields='adj_factor', co_ids=list(range(457)), ind_dates=list(range(2325-1, 2325)), is_mat=True, is_old=True)
 
     # tepix = get_db(db_address='192.168.154.107:27017', db_user_name='user', db_password='algorithm123',
     #                     db_name='market', coll='tepix', fields='close_nw__close_real',
